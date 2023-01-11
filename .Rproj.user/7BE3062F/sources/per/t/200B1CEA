@@ -1,0 +1,27 @@
+{
+    "id": "200B1CEA",
+    "path": "~/GitHub/ENUT/script.R",
+    "project_path": "script.R",
+    "type": "r_source",
+    "hash": "2147381448",
+    "contents": "",
+    "dirty": false,
+    "created": 1673451672985.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "18,0",
+        "scrollLine": "4"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1673452484,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1673452484215,
+    "read_only": false,
+    "read_only_alternatives": []
+}
