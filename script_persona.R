@@ -2,7 +2,7 @@ library(tidyverse)
 
 
 
-base_persona <- read.table("enut2021_base.txt",
+base_persona <- read.table("C:/Users/ailen/Documents/GitHub/ENUT/enut2021_base.txt",
                            header =  TRUE,
                            sep ="|",
 )
@@ -24,7 +24,7 @@ monomarental_demanda <- base_persona %>%
                       group_by(BHDC_SEL) %>% 
                       summarise(
                         hogares = sum(WHOG))
-                       #%>% spread(., key = BHDC_SEL,value = hogares) %>% 
+                        spread(., key = BHDC_SEL,value = hogares)
 
 #  CUIDADO_FAMILIA, CUIDADO_FAMILIA_EXTERNA, CUIDADO_HOGAR, CUIDADO_COMUNIDAD
 
@@ -37,7 +37,7 @@ monomarental_estatal <- base_persona %>%
   mutate(CUIDADO_ESTADO = ifelse(CUIDADO_ESTADO == 0, "Con demanda de cuidados sin cuidado del Estado", "Con demanda de cuidados con cuidado del Estado")) %>% 
   group_by(CUIDADO_ESTADO) %>% 
   summarise(
-    hogares_monomarentales = sum(WHOG)
+  hogares_monomarentales = sum(WHOG)
   ) #%>% spread(., key = CUIDADO_ESTADO,value =  hogares_monomarentales)
 
 
@@ -76,6 +76,50 @@ inactivo_con_demanda_13 <- base_persona %>%
     hogares_con_demanda_inactivo_13 = sum(WHOG)
   )
 
+#----------------------------------------
+#Horas promedio dedicadas a las tareas domésticas y de cuidado no remunerada en hogares monomarentales con presencia de niñxs de hasta 13 años
+
+monomarental_horas <- base_persona %>%
+  filter(TIPO_HOGAR_NUCLEAR == 4, CANT_PERSONASHASTA13 >= 1) %>%
+  select(TCS_GRUPO_CUIDADO,TCS_GRUPO_DOMESTICO, WHOG) %>%
+  group_by(TCS_GRUPO_DOMESTICO) %>% 
+  summarise(
+    hogares = sum(WHOG))
+    mean(monomarental_horas)
+    
+#promedio entre columnas
+colMeans (monomarental_horas)
+#--------------------------------------------------------------------
+#Hogares con personas mayores que pagan por una cuidadora 
+hogar_mayores_cuidadora <- base_persona %>%
+  filter(BHDC01_06_SEL == 1) %>%
+  select(CANT_PERSONAS65YMAS, BHDC01_06_SEL,WHOG) %>% 
+  mutate(BHDC01_06_SEL = ifelse(BHDC01_06_SEL == 0, "No cuida una persona a quien se paga", "Lo cuida una persona a quien se paga")) %>% 
+  group_by(BHDC01_06_SEL) %>% 
+  summarise(
+    hogares = sum(WHOG))
+#spread(., key = BHDC_SEL,value = hogares)
+
+
+#--------------------------------------------------------------------
+#Hogares que tienen personas mayores viviendo en residencias 
+
+hogar_mayores_residencia <- base_persona %>%
+  filter(BHAH01 == 1, BHAH02_01== 1) %>%
+  select(BHAH02_01, BHAH01,WHOG) %>% 
+  mutate(BHAH01 = ifelse(BHAH01 == 0, "Hogares que no  personas mayores viviendo en residencias", "Hogares que tiene personas mayores viviendo en residencias")) %>% 
+  group_by(BHAH01) %>% 
+  summarise(
+    hogares = sum(WHOG))
 
 
 
+
+
+
+#monomarental_horas$promedio <- rowMeans (monomarental_horas [, c (1,2)], na.rm = TRUE )
+    
+
+#¿si quiero calcular este indicador para hogares con ninxs de hasta 5 años, tengo que joinear con base miembros o no se puede directamente?
+#¿o a este cálculo lo tengo que sacar con la base de diario?
+#¿pasar minutos a horas?
